@@ -18,6 +18,10 @@
   --color-amber-800: #92400e;
 
   --font-nanum-square: "NanumSquare", sans-serif;
+
+  --breakpoint-sm: 375px;
+  --breakpoint-md: 744px;
+  --breakpoint-lg: 1920px;
 }
 
 body {
