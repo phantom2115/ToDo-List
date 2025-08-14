@@ -1,5 +1,4 @@
-# ToDo Listhttps://github.com/phantom2115/ToDo-List/blob/main/README.md
-
+# ToDo List
 ## 프로젝트 설명
 
 자신의 할 일 목록을 관리하는 To Do 서비스 입니다.
