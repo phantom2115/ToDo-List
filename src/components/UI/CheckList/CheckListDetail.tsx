@@ -1,20 +1,24 @@
 import Image from "next/image";
-import React from "react";
 import checked from "../../../assets/icons/checkbox-checked.svg";
 import unChecked from "../../../assets/icons/checkbox-unchecked.svg";
 import { cn } from "@/lib/utils";
 
-interface CheckListProps {
+interface CheckListDetailProps {
   name: string;
   isCompleted: boolean;
   onClick: () => void;
 }
 
-const CheckList = ({ name, isCompleted, onClick }: CheckListProps) => {
+const CheckListDetail = ({
+  name,
+  isCompleted,
+  onClick,
+}: CheckListDetailProps) => {
   return (
     <div
       className={cn(
-        "px-3 py-[9px] inset-ring-slate-900 inset-ring-2 rounded-4xl",
+        "flex items-center justify-center",
+        "py-4 inset-ring-slate-900 inset-ring-2 rounded-2xl",
         isCompleted ? "bg-violet-100" : "bg-white"
       )}
     >
@@ -24,8 +28,8 @@ const CheckList = ({ name, isCompleted, onClick }: CheckListProps) => {
         </button>
         <div
           className={cn(
-            "text-slate-900 text-[16px] font-regular truncate",
-            isCompleted && "line-through"
+            "text-slate-900 text-[20px] font-bold truncate",
+            isCompleted && "underline"
           )}
         >
           {name}
@@ -35,4 +39,4 @@ const CheckList = ({ name, isCompleted, onClick }: CheckListProps) => {
   );
 };
 
-export default CheckList;
+export default CheckListDetail;
