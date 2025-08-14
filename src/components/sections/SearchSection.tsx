@@ -5,8 +5,8 @@ import { useTodoListQuery } from "@/apis/todo/querys/todo.query-options";
 import { useUserStore } from "@/store/userStore";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import SearchBar from "@/components/ui/Search/SearchBar";
-import Button from "@/components/ui/Button/Button";
+import SearchBar from "@/components/UI/Search/SearchBar";
+import Button from "@/components/UI/Button/Button";
 import { Plus } from "../../assets/icons/Plus";
 
 const SearchSection = () => {

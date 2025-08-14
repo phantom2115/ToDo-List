@@ -1,10 +1,10 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import CheckListDetail from "@/components/ui/CheckList/CheckListDetail";
+import CheckListDetail from "@/components/UI/CheckList/CheckListDetail";
 import Image from "next/image";
 import memo from "../../assets/images/memo.svg";
 import emptyImage from "../../assets/images/img.svg";
-import Button from "@/components/ui/Button/Button";
-import ImageButton from "@/components/ui/Button/ImageButton";
+import Button from "@/components/UI/Button/Button";
+import ImageButton from "@/components/UI/Button/ImageButton";
 import icons from "../../assets/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useTodoDetailQuery } from "../../apis/todo/querys/todo.query-options";
