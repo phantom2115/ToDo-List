@@ -7,19 +7,32 @@ import { cn } from "@/lib/utils";
 interface CheckListProps {
   name: string;
   isCompleted: boolean;
+  checkboxClick: () => void;
   onClick: () => void;
 }
 
-const CheckList = ({ name, isCompleted, onClick }: CheckListProps) => {
+const CheckList = ({
+  name,
+  isCompleted,
+  checkboxClick,
+  onClick,
+}: CheckListProps) => {
   return (
     <div
       className={cn(
         "px-3 py-[9px] inset-ring-slate-900 inset-ring-2 rounded-4xl",
         isCompleted ? "bg-violet-100" : "bg-white"
       )}
+      onClick={onClick}
     >
       <div className="flex items-center gap-4">
-        <button onClick={onClick} className="size-8 shrink-0 cursor-pointer">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            checkboxClick();
+          }}
+          className="size-8 shrink-0 cursor-pointer"
+        >
           <Image src={isCompleted ? checked : unChecked} alt="unChecked" />
         </button>
         <div

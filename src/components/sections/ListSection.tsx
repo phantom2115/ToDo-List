@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useRef } from "react";
 import todo from "../../assets/images/todo.svg";
 import done from "../../assets/images/done.svg";
 import CheckList from "../ui/CheckList/CheckList";
@@ -7,15 +7,21 @@ import emptyDoneSm from "../../assets/images/donesm.svg";
 import emptyDoneLg from "../../assets/images/donelg.svg";
 import emptyTodoSm from "../../assets/images/todosm.svg";
 import emptyTodoLg from "../../assets/images/todolg.svg";
-
-const response: { id: number; name: string; isCompleted: boolean }[] = [];
+import { useQuery } from "@tanstack/react-query";
+import { useTodoListQuery } from "@/apis/todo/querys/todo.query-options";
+import { Todo } from "@/types/todo";
+import { useUserStore } from "@/store/userStore";
+import { useUpdateTodoMutation } from "@/apis/todo/mutations/useUpdateTodoMutation";
+import { useRouter } from "next/navigation";
 
 const ListSection = () => {
+  const { id } = useUserStore();
+  const { data } = useQuery(useTodoListQuery(Number(id), 1, 100000));
   return (
     <section className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-6">
       <List
         type={todo}
-        items={response.filter((item) => !item.isCompleted)}
+        items={data?.filter((item) => !item.isCompleted)}
         emptyMessage="할 일이 없어요."
         guideMessage="TODO를 새롭게 추가해주세요!"
         emptyImageSm={emptyTodoSm}
@@ -23,7 +29,7 @@ const ListSection = () => {
       />
       <List
         type={done}
-        items={response.filter((item) => item.isCompleted)}
+        items={data?.filter((item) => item.isCompleted)}
         emptyMessage="아직 다 한 일이 없어요."
         guideMessage="해야 할 일을 체크해보세요!"
         emptyImageSm={emptyDoneSm}
@@ -37,7 +43,7 @@ export default ListSection;
 
 interface ListProps {
   type: typeof todo | typeof done;
-  items: { id: number; name: string; isCompleted: boolean }[];
+  items?: Todo[];
   emptyMessage: string;
   guideMessage: string;
   emptyImageSm: any;
@@ -52,17 +58,31 @@ const List = ({
   emptyImageSm,
   emptyImageLg,
 }: ListProps) => {
+  const { id } = useUserStore();
+  const { mutate: updateTodo } = useUpdateTodoMutation();
+  const router = useRouter();
   return (
     <div className="flex flex-col gap-4">
       <Image src={type} alt="todo" />
-      <div className="flex flex-col gap-4">
-        {items.length > 0 ? (
+      <div className="flex flex-col gap-4 lg:max-h-[600px] max-h-[320px] overflow-y-auto pr-3">
+        {items && items.length > 0 ? (
           items.map((item) => (
             <CheckList
               key={item.id}
               name={item.name}
               isCompleted={item.isCompleted}
-              onClick={() => {}}
+              checkboxClick={() => {
+                updateTodo({
+                  id: Number(id),
+                  payload: {
+                    id: item.id,
+                    isCompleted: !item.isCompleted,
+                  },
+                });
+              }}
+              onClick={() => {
+                router.push(`/items/${item.id}`);
+              }}
             />
           ))
         ) : (

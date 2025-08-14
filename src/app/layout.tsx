@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "../style/globals.css";
 import TopNavigation from "@/components/layout/TopNavigation";
 import BackgroundWrapper from "../components/layout/BackgroundWrapper";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const font = localFont({
   src: [
@@ -42,8 +43,10 @@ export default function RootLayout({
   return (
     <html lang="ko" className={font.className}>
       <body>
-        <TopNavigation />
-        <BackgroundWrapper>{children}</BackgroundWrapper>
+        <QueryProvider>
+          <TopNavigation />
+          <BackgroundWrapper>{children}</BackgroundWrapper>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import React, { ButtonHTMLAttributes } from "react";
 
 const buttonVariants = cva(
   cn(
-    "flex items-center justify-center shrink-0",
+    "flex items-center justify-center shrink-0 cursor-pointer",
     "w-14 h-14 rounded-full",
     "inset-ring-slate-900 inset-ring-2 border-slate-900 border-b-2 border-r-2",
     "md:w-[162px] md:h-14 md:rounded-4xl",
