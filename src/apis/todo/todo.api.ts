@@ -36,3 +36,8 @@ export const getTodoDetail = async (id: number, itemId: number) => {
   const response = await axios.get(`${Base_URL}/${id}/items/${itemId}`);
   return response.data;
 };
+
+export const deleteTodo = async (id: number, itemId: number) => {
+  const response = await axios.delete(`${Base_URL}/${id}/items/${itemId}`);
+  return response.data;
+};

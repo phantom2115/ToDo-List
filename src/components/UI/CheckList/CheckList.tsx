@@ -20,7 +20,7 @@ const CheckList = ({
   return (
     <div
       className={cn(
-        "px-3 py-[9px] inset-ring-slate-900 inset-ring-2 rounded-4xl",
+        "px-3 py-[9px] inset-ring-slate-900 inset-ring-2 rounded-4xl cursor-pointer",
         isCompleted ? "bg-violet-100" : "bg-white"
       )}
       onClick={onClick}
