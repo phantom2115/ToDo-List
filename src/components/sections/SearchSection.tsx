@@ -1,12 +1,13 @@
 "use client";
-import React, { useState } from "react";
-import SearchBar from "../ui/Search/SearchBar";
-import Button from "../ui/Button/Button";
-import icons from "../../assets/icons";
-import { useUserStore } from "../../store/userStore";
+
+import { useCreateTodoMutation } from "@/apis/todo/mutations/useCreateTodoMutation";
+import { useTodoListQuery } from "@/apis/todo/querys/todo.query-options";
+import { useUserStore } from "@/store/userStore";
 import { useQuery } from "@tanstack/react-query";
-import { useTodoListQuery } from "../../apis/todo/querys/todo.query-options";
-import { useCreateTodoMutation } from "../../apis/todo/mutations/useCreateTodoMutation";
+import { useState } from "react";
+import SearchBar from "@/components/ui/Search/SearchBar";
+import Button from "@/components/ui/Button/Button";
+import { Plus } from "../../assets/icons/Plus";
 
 const SearchSection = () => {
   const { id } = useUserStore();
@@ -35,7 +36,7 @@ const SearchSection = () => {
         <Button
           color={data?.length === 0 ? "violet" : "default"}
           textColor={data?.length === 0 ? "white" : "default"}
-          icon={<icons.Plus stroke={data?.length === 0 ? "#fff" : "#0f172a"} />}
+          icon={<Plus stroke={data?.length === 0 ? "#fff" : "#0f172a"} />}
         >
           추가하기
         </Button>
