@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../style/globals.css";
 import TopNavigation from "@/components/layout/TopNavigation";
+import BackgroundWrapper from "../components/layout/BackgroundWrapper";
 
 const font = localFont({
   src: [
@@ -42,7 +43,7 @@ export default function RootLayout({
     <html lang="ko" className={font.className}>
       <body>
         <TopNavigation />
-        <div className="lg:px-[360px] md:px-6 px-4">{children}</div>
+        <BackgroundWrapper>{children}</BackgroundWrapper>
       </body>
     </html>
   );

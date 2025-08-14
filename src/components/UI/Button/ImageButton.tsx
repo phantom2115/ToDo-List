@@ -1,8 +1,9 @@
+import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import React, { ButtonHTMLAttributes } from "react";
 
 const ImageButtonVariants = cva(
-  "flex items-center justify-center size-16 rounded-full",
+  "flex items-center justify-center size-16 rounded-full cursor-pointer",
   {
     variants: {
       variant: {
@@ -21,12 +22,14 @@ interface ImageButtonProps
 const ImageButton = ({
   variant,
   icon,
-}: {
-  variant: "attach" | "edit";
-  icon: React.ReactNode;
-}) => {
+  className,
+  ...props
+}: ImageButtonProps) => {
   return (
-    <button className={ImageButtonVariants({ variant })}>
+    <button
+      className={cn(ImageButtonVariants({ variant }), className)}
+      {...props}
+    >
       <div className="size-6 flex items-center justify-center">{icon}</div>
     </button>
   );

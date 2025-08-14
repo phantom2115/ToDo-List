@@ -41,6 +41,7 @@ interface ButtonProps
   className?: string;
   icon?: React.ReactNode;
   textColor?: "default" | "white";
+  textClassName?: string;
   children: React.ReactNode;
 }
 
@@ -49,6 +50,7 @@ const Button = ({
   className,
   icon,
   textColor,
+  textClassName,
   children,
   ...props
 }: ButtonProps) => {
@@ -56,7 +58,9 @@ const Button = ({
     <button className={cn(buttonVariants({ color }), className)} {...props}>
       <div className="flex items-center justify-center gap-2">
         <span className="flex items-center justify-center">{icon}</span>
-        <span className={cn(textColorVariants({ textColor }))}>{children}</span>
+        <span className={cn(textColorVariants({ textColor }), textClassName)}>
+          {children}
+        </span>
       </div>
     </button>
   );
