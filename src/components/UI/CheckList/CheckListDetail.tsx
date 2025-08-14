@@ -2,7 +2,6 @@ import Image from "next/image";
 import checked from "../../../assets/icons/checkbox-checked.svg";
 import unChecked from "../../../assets/icons/checkbox-unchecked.svg";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
 
 interface CheckListDetailProps {
   name: string;

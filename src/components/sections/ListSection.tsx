@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React, { useRef } from "react";
 import todo from "../../assets/images/todo.svg";
 import done from "../../assets/images/done.svg";
 import CheckList from "../ui/CheckList/CheckList";
@@ -8,10 +7,10 @@ import emptyDoneLg from "../../assets/images/donelg.svg";
 import emptyTodoSm from "../../assets/images/todosm.svg";
 import emptyTodoLg from "../../assets/images/todolg.svg";
 import { useQuery } from "@tanstack/react-query";
-import { useTodoListQuery } from "@/apis/todo/querys/todo.query-options";
-import { Todo } from "@/types/todo";
-import { useUserStore } from "@/store/userStore";
-import { useUpdateTodoMutation } from "@/apis/todo/mutations/useUpdateTodoMutation";
+import { useTodoListQuery } from "../../apis/todo/querys/todo.query-options";
+import { Todo } from "../../types/todo";
+import { useUserStore } from "../../store/userStore";
+import { useUpdateTodoMutation } from "../../apis/todo/mutations/useUpdateTodoMutation";
 import { useRouter } from "next/navigation";
 
 const ListSection = () => {

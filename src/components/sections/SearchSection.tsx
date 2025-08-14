@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import SearchBar from "../ui/Search/SearchBar";
 import Button from "../ui/Button/Button";
-import icons from "@/assets/icons";
-import { useUserStore } from "@/store/userStore";
+import icons from "../../assets/icons";
+import { useUserStore } from "../../store/userStore";
 import { useQuery } from "@tanstack/react-query";
-import { useTodoListQuery } from "@/apis/todo/querys/todo.query-options";
-import { useCreateTodoMutation } from "@/apis/todo/mutations/useCreateTodoMutation";
+import { useTodoListQuery } from "../../apis/todo/querys/todo.query-options";
+import { useCreateTodoMutation } from "../../apis/todo/mutations/useCreateTodoMutation";
 
 const SearchSection = () => {
   const { id } = useUserStore();

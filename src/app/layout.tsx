@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../style/globals.css";
-import TopNavigation from "@/components/layout/TopNavigation";
+import TopNavigation from "../components/layout/TopNavigation";
 import BackgroundWrapper from "../components/layout/BackgroundWrapper";
-import QueryProvider from "@/components/providers/QueryProvider";
+import QueryProvider from "../components/providers/QueryProvider";
 
 const font = localFont({
   src: [

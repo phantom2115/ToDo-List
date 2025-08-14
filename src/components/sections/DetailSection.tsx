@@ -1,18 +1,18 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import CheckListDetail from "../ui/CheckList/CheckListDetail";
 import Image from "next/image";
 import memo from "../../assets/images/memo.svg";
 import emptyImage from "../../assets/images/img.svg";
 import Button from "../ui/Button/Button";
 import ImageButton from "../ui/Button/ImageButton";
-import icons from "@/assets/icons";
+import icons from "../../assets/icons";
 import { useQuery } from "@tanstack/react-query";
-import { useTodoDetailQuery } from "@/apis/todo/querys/todo.query-options";
+import { useTodoDetailQuery } from "../../apis/todo/querys/todo.query-options";
 import { useParams } from "next/navigation";
-import { useUpdateTodoMutation } from "@/apis/todo/mutations/useUpdateTodoMutation";
-import { useUploadImageMutation } from "@/apis/image/mutations/useUploadImageMutation";
+import { useUpdateTodoMutation } from "../../apis/todo/mutations/useUpdateTodoMutation";
+import { useUploadImageMutation } from "../../apis/image/mutations/useUploadImageMutation";
 import { useRouter } from "next/navigation";
-import { useDeleteTodoMutation } from "@/apis/todo/mutations/useDeleteTodoMutation";
+import { useDeleteTodoMutation } from "../../apis/todo/mutations/useDeleteTodoMutation";
 
 const IMAGE_CONSTRAINTS = {
   MAX_SIZE: 5 * 1024 * 1024, // 5MB

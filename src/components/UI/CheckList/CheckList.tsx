@@ -1,8 +1,7 @@
 import Image from "next/image";
-import React from "react";
 import checked from "../../../assets/icons/checkbox-checked.svg";
 import unChecked from "../../../assets/icons/checkbox-unchecked.svg";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 
 interface CheckListProps {
   name: string;

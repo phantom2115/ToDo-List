@@ -1,8 +1,8 @@
 "use client";
-import ListSection from "@/components/sections/ListSection";
-import SearchSection from "@/components/sections/SearchSection";
-import React, { useEffect } from "react";
-import { useUserStore } from "@/store/userStore";
+import ListSection from "../components/sections/ListSection";
+import SearchSection from "../components/sections/SearchSection";
+import { useEffect } from "react";
+import { useUserStore } from "../store/userStore";
 
 const page = () => {
   const { setId } = useUserStore();

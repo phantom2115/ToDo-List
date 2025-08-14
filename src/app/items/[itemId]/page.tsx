@@ -1,5 +1,5 @@
 "use client";
-import DetailSection from "@/components/sections/DetailSection";
+import DetailSection from "../../../components/sections/DetailSection";
 import React from "react";
 
 const page = () => {
