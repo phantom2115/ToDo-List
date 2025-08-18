@@ -4,7 +4,7 @@ import Image from "next/image";
 import memo from "../../assets/images/memo.svg";
 import emptyImage from "../../assets/images/img.svg";
 import Button from "@/components/UI/Button/Button";
-import ImageButton from "@/components/UI/Button/ImageButton";
+import AddImageButton from "@/components/UI/Button/ImageButton";
 import icons from "../../assets/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useTodoDetailQuery } from "../../apis/todo/querys/todo.query-options";
@@ -312,7 +312,7 @@ const DetailSection = () => {
             onChange={handleFileChange}
           />
 
-          <ImageButton
+          <AddImageButton
             variant={todoDetail?.imageUrl ? "edit" : "attach"}
             icon={
               todoDetail?.imageUrl ? (

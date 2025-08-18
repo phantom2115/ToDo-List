@@ -19,7 +19,7 @@ interface ImageButtonProps
   icon: React.ReactNode;
 }
 
-const ImageButton = ({
+const AddImageButton = ({
   variant,
   icon,
   className,
@@ -35,4 +35,4 @@ const ImageButton = ({
   );
 };
 
-export default ImageButton;
+export default AddImageButton;
