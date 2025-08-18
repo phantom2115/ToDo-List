@@ -3,6 +3,7 @@ import {
   createTodoPayload,
   getTodoListPayload,
   Todo,
+  TodoDetail,
   updateTodoPayload,
 } from "@/types/todo";
 import axios from "axios";
@@ -11,7 +12,7 @@ export const getTodoList = async (
   id: number,
   payload: getTodoListPayload
 ): Promise<Todo[]> => {
-  const response = await axios.get(`${Base_URL}/${id}/items`, {
+  const response = await axios.get<Todo[]>(`${Base_URL}/${id}/items`, {
     params: payload,
   });
   return response.data;
@@ -33,7 +34,9 @@ export const updateTodo = async (id: number, payload: updateTodoPayload) => {
 };
 
 export const getTodoDetail = async (id: number, itemId: number) => {
-  const response = await axios.get(`${Base_URL}/${id}/items/${itemId}`);
+  const response = await axios.get<TodoDetail>(
+    `${Base_URL}/${id}/items/${itemId}`
+  );
   return response.data;
 };
 

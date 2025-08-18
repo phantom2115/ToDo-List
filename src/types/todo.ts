@@ -4,6 +4,15 @@ export interface Todo {
   isCompleted: boolean;
 }
 
+export interface TodoDetail {
+  isCompleted: true;
+  imageUrl: string;
+  memo: string;
+  name: string;
+  tenantId: string;
+  id: number;
+}
+
 export interface getTodoListPayload {
   page?: number;
   pageSize?: number;
