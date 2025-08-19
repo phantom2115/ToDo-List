@@ -15,6 +15,8 @@ import { useUploadImageMutation } from "@/apis/image/mutations/useUploadImageMut
 import emptyImage from "../../assets/images/img.svg";
 import { TENANT_ID } from "@/constant/api";
 import { Typography } from "../UI/Typography";
+import { cn } from "@/lib/utils";
+
 const DetailSection = () => {
   const router = useRouter();
 
@@ -32,17 +34,24 @@ const DetailSection = () => {
   const { mutate: uploadImage, isPending: isUploadPending } =
     useUploadImageMutation();
 
-  const [isActive, setIsActive] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [name, setName] = useState("");
   const [memo, setMemo] = useState("");
   const [imageUrl, setImageUrl] = useState<string | string>("");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (todoDetail) {
+      setMemo(todoDetail?.memo || "");
+      setIsCompleted(todoDetail?.isCompleted);
+      setName(todoDetail?.name);
+      setImageUrl(todoDetail?.imageUrl || "");
+    }
+  }, [todoDetail]);
 
   const handleToggleComplete = () => {
     setIsCompleted(!isCompleted);
   };
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -77,55 +86,18 @@ const DetailSection = () => {
     );
   };
 
-  useEffect(() => {
-    if (todoDetail) {
-      setMemo(todoDetail?.memo || "");
-      setIsCompleted(todoDetail?.isCompleted);
-      setName(todoDetail?.name);
-      setImageUrl(todoDetail?.imageUrl || "");
-      setIsActive(false);
-    }
-  }, [todoDetail]);
-
-  useEffect(() => {
-    if (todoDetail) {
-      if (
-        isCompleted !== todoDetail.isCompleted ||
-        name !== todoDetail.name ||
-        (memo || "") !== (todoDetail.memo || "") ||
-        (imageUrl || "") !== (todoDetail.imageUrl || "")
-      ) {
-        setIsActive(true);
-      } else {
-        setIsActive(false);
-      }
-    }
-  }, [
-    isCompleted,
-    todoDetail?.isCompleted,
-    name,
-    todoDetail?.name,
-    memo,
-    todoDetail?.memo,
-    imageUrl,
-    todoDetail?.imageUrl,
-  ]);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (!validateFile(file)) {
-        return;
+    if (!file || !validateFile(file)) return;
+
+    uploadImage(
+      { tenantId: TENANT_ID, file },
+      {
+        onSuccess: (url) => {
+          setImageUrl(url.url);
+        },
       }
-      uploadImage(
-        { tenantId: TENANT_ID, file },
-        {
-          onSuccess: (url) => {
-            setImageUrl(url.url);
-          },
-        }
-      );
-    }
+    );
   };
 
   const validateFile = (file: File) => {
@@ -140,6 +112,13 @@ const DetailSection = () => {
     }
     return true;
   };
+
+  const isActive = todoDetail
+    ? isCompleted !== todoDetail.isCompleted ||
+      name !== todoDetail.name ||
+      (memo || "") !== (todoDetail.memo || "") ||
+      (imageUrl || "") !== (todoDetail.imageUrl || "")
+    : false;
 
   return (
     <section className="flex flex-col gap-6">
@@ -158,21 +137,10 @@ const DetailSection = () => {
 
       <div className="lg:flex lg:flex-row lg:justify-between flex flex-col gap-6">
         <div
-          className="lg:w-[384px] w-full h-[311px] rounded-2xl bg-slate-50 relative overflow-hidden flex items-center justify-center"
-          style={
-            imageUrl
-              ? {
-                  borderColor: "#CBD5E1",
-                  borderStyle: "solid",
-                  borderWidth: "2px",
-                }
-              : {
-                  borderColor: "#CBD5E1",
-                  borderStyle: "dashed",
-                  borderWidth: "2px",
-                  borderSpacing: "15px",
-                }
-          }
+          className={cn(
+            "lg:w-[384px] w-full h-[311px] rounded-2xl border-2 border-slate-300 bg-slate-50 relative overflow-hidden flex items-center justify-center",
+            imageUrl ? "border-solid" : "border-dashed border-spacing-[15px]"
+          )}
         >
           {(isPending || isUploadPending) && (
             <div className="w-full h-[311px] bg-slate-50/30 absolute z-10 flex items-center justify-center">
@@ -190,13 +158,6 @@ const DetailSection = () => {
           ) : (
             <Image src={emptyImage} alt="empty" />
           )}
-          <input
-            type="file"
-            accept="image/*"
-            hidden
-            ref={fileInputRef}
-            onChange={handleFileChange}
-          />
           <AddImageButton
             variant={imageUrl ? "edit" : "attach"}
             icon={
@@ -207,9 +168,7 @@ const DetailSection = () => {
               )
             }
             className="absolute bottom-4 right-4"
-            onClick={() => {
-              fileInputRef.current?.click();
-            }}
+            handleFileChange={handleFileChange}
           />
         </div>
         <div className="relative">

@@ -36,7 +36,7 @@ const List = ({
   return (
     <div className="flex flex-col gap-4">
       <Image src={type} alt="todo" />
-      <div className="flex flex-col gap-4 lg:max-h-[600px] max-h-[320px] overflow-y-auto pr-3 ">
+      <div className="flex flex-col gap-4 lg:max-h-[600px] max-h-[320px] overflow-y-auto pr-3">
         {isListPending > 0 ? (
           <ListSkeleton />
         ) : items && items.length > 0 ? (

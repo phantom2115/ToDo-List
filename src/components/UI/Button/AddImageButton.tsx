@@ -1,6 +1,7 @@
+"use client";
 import { cn } from "../../../lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
-import React, { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, useRef } from "react";
 
 const ImageButtonVariants = cva(
   "flex items-center justify-center size-16 rounded-full cursor-pointer",
@@ -17,21 +18,37 @@ interface ImageButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof ImageButtonVariants> {
   icon: React.ReactNode;
+  handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const AddImageButton = ({
   variant,
   icon,
   className,
+  handleFileChange,
   ...props
 }: ImageButtonProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   return (
-    <button
-      className={cn(ImageButtonVariants({ variant }), className)}
-      {...props}
-    >
-      <div className="size-6 flex items-center justify-center">{icon}</div>
-    </button>
+    <>
+      <input
+        type="file"
+        accept="image/*"
+        hidden
+        ref={fileInputRef}
+        onChange={handleFileChange}
+      />
+      <button
+        className={cn(ImageButtonVariants({ variant }), className)}
+        onClick={() => {
+          fileInputRef.current?.click();
+        }}
+        {...props}
+      >
+        <div className="size-6 flex items-center justify-center">{icon}</div>
+      </button>
+    </>
   );
 };
 
