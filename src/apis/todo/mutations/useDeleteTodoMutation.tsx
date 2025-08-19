@@ -8,8 +8,8 @@ export const useDeleteTodoMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: [MutationKeys.todo.delete],
-    mutationFn: ({ id, itemId }: { id: string; itemId: number }) =>
-      deleteTodo(id, itemId),
+    mutationFn: ({ tenantId, itemId }: { tenantId: string; itemId: number }) =>
+      deleteTodo(tenantId, itemId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QueryKeys.todo.all });
     },

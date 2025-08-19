@@ -10,8 +10,10 @@ import { useUserStore } from "../../store/userStore";
 import List from "../UI/List/List";
 
 const ListSection = () => {
-  const { id } = useUserStore();
-  const { data } = useQuery(useTodoListQuery(id, 1, 100000));
+  const { tenantId } = useUserStore();
+  const { data } = useQuery(
+    useTodoListQuery(tenantId, { page: 1, pageSize: 100000 })
+  );
   return (
     <section className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-6">
       <List

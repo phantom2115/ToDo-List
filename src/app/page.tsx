@@ -5,18 +5,18 @@ import { useEffect } from "react";
 import { useUserStore } from "../store/userStore";
 
 const page = () => {
-  const { setId } = useUserStore();
+  const { setTenantId } = useUserStore();
 
   useEffect(() => {
     const existingId = localStorage.getItem("id");
 
     if (existingId) {
-      setId("phantom2115");
+      setTenantId("phantom2115");
     } else {
       localStorage.setItem("id", "phantom2115");
-      setId("phantom2115");
+      setTenantId("phantom2115");
     }
-  }, [setId]);
+  }, [setTenantId]);
 
   return (
     <main className="flex flex-col gap-6 md:gap-10">

@@ -10,6 +10,7 @@ import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 import MutationKeys from "@/apis/mutation-keys";
 import ListSkeleton from "./ListSkeleton";
 import QueryKeys from "@/apis/query-keys";
+import { useCreateTodoMutation } from "@/apis/todo/mutations/useCreateTodoMutation";
 
 interface ListProps {
   type: typeof todo | typeof done;
@@ -28,12 +29,10 @@ const List = ({
   emptyImageSm,
   emptyImageLg,
 }: ListProps) => {
-  const { id } = useUserStore();
+  const { tenantId: id } = useUserStore();
   const { mutate: updateTodo } = useUpdateTodoMutation();
   const router = useRouter();
-  const isCreatePending = useIsMutating({
-    mutationKey: [MutationKeys.todo.create],
-  });
+
   const isListPending = useIsFetching({
     queryKey: QueryKeys.todo.all,
   });
@@ -41,7 +40,7 @@ const List = ({
     <div className="flex flex-col gap-4">
       <Image src={type} alt="todo" />
       <div className="flex flex-col gap-4 lg:max-h-[600px] max-h-[320px] overflow-y-auto pr-3 ">
-        {isListPending || isCreatePending > 0 ? (
+        {isListPending > 0 ? (
           <ListSkeleton />
         ) : items && items.length > 0 ? (
           items.map((item) => (
@@ -51,9 +50,9 @@ const List = ({
               isCompleted={item.isCompleted}
               checkboxClick={() => {
                 updateTodo({
-                  id: id,
+                  tenantId: id,
+                  itemId: item.id,
                   payload: {
-                    id: item.id,
                     isCompleted: !item.isCompleted,
                   },
                 });

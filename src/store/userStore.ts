@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 interface UserState {
-  id: string;
-  setId: (id: string) => void;
+  tenantId: string;
+  setTenantId: (id: string) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
-  id: "phantom2115",
-  setId: (id: string) => set({ id }),
+  tenantId: "phantom2115",
+  setTenantId: (id: string) => set({ tenantId: id }),
 }));

@@ -1,291 +1,171 @@
-import { useRef, useEffect, useState, useCallback } from "react";
-import CheckListDetail from "@/components/UI/CheckList/CheckListDetail";
-import Image from "next/image";
-import memo from "../../assets/images/memo.svg";
-import emptyImage from "../../assets/images/img.svg";
-import Button from "@/components/UI/Button/Button";
-import AddImageButton from "@/components/UI/Button/AddImageButton";
-import icons from "../../assets/icons";
-import { useQuery } from "@tanstack/react-query";
-import { useTodoDetailQuery } from "../../apis/todo/querys/todo.query-options";
-import { useParams } from "next/navigation";
-import { useUpdateTodoMutation } from "../../apis/todo/mutations/useUpdateTodoMutation";
-import { useUploadImageMutation } from "../../apis/image/mutations/useUploadImageMutation";
+import React, { useEffect, useRef, useState } from "react";
+import Button from "../UI/Button/Button";
+import icons from "@/assets/icons";
+import CheckListDetail from "../UI/CheckList/CheckListDetail";
 import { useRouter } from "next/navigation";
-import { useDeleteTodoMutation } from "../../apis/todo/mutations/useDeleteTodoMutation";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { useTodoDetailQuery } from "@/apis/todo/querys/todo.query-options";
 import { useUserStore } from "@/store/userStore";
-
-const IMAGE_CONSTRAINTS = {
-  MAX_SIZE: 5 * 1024 * 1024, // 5MB
-  MAX_WIDTH: 384,
-  MAX_HEIGHT: 311,
-} as const;
-
-const FILE_NAME_REGEX = /^[a-zA-Z0-9._-]+\.(jpg|jpeg|png|gif|webp)$/i;
-
+import { useUpdateTodoMutation } from "@/apis/todo/mutations/useUpdateTodoMutation";
+import { useDeleteTodoMutation } from "@/apis/todo/mutations/useDeleteTodoMutation";
+import Image from "next/image";
+import memoImage from "../../assets/images/memo.svg";
+import AddImageButton from "../UI/Button/AddImageButton";
+import { useUploadImageMutation } from "@/apis/image/mutations/useUploadImageMutation";
+import emptyImage from "../../assets/images/img.svg";
 const DetailSection = () => {
   const router = useRouter();
+  const { tenantId } = useUserStore();
+
   const { itemId } = useParams<{ itemId: string }>();
 
-  const { id } = useUserStore();
-  const [isEdit, setIsEdit] = useState(false);
-  const [editName, setEditName] = useState<string>("");
-  const [editMemo, setEditMemo] = useState<string>("");
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { data: todoDetail, isPending } = useQuery(
+    useTodoDetailQuery(tenantId, Number(itemId))
+  );
+  const { mutate: updateTodo, isPending: isUpdatePending } =
+    useUpdateTodoMutation();
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { mutate: deleteTodo, isPending: isDeletePending } =
+    useDeleteTodoMutation();
+
+  const { mutate: uploadImage, isPending: isUploadPending } =
+    useUploadImageMutation();
+
+  const [isActive, setIsActive] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [name, setName] = useState("");
+  const [memo, setMemo] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | string>("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { data: todoDetail } = useQuery(useTodoDetailQuery(id, Number(itemId)));
-  const { mutate: updateTodo } = useUpdateTodoMutation();
-  const { mutate: uploadImage } = useUploadImageMutation(id);
-  const { mutate: deleteTodo } = useDeleteTodoMutation();
+  const handleToggleComplete = () => {
+    setIsCompleted(!isCompleted);
+  };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
 
-  useEffect(() => {
-    if (todoDetail) {
-      setEditName(todoDetail.name || "");
-      setEditMemo(todoDetail.memo || "");
-    }
-  }, [todoDetail]);
-
-  const handleNameChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEditName(e.target.value);
-    },
-    []
-  );
-
-  const handleMemoChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setEditMemo(e.target.value);
-    },
-    []
-  );
-
-  const handleToggleComplete = useCallback(() => {
-    if (!id || !itemId) return;
-
-    updateTodo({
-      id: id,
-      payload: {
-        id: Number(itemId),
-        isCompleted: !todoDetail?.isCompleted,
-      },
-    });
-  }, [id, itemId, todoDetail?.isCompleted, updateTodo]);
-
-  const handleImageUpload = useCallback(
-    (file: File) => {
-      // 파일 이름 검증
-      if (!FILE_NAME_REGEX.test(file.name)) {
-        alert("파일 이름은 영어, 숫자, 특수문자(._-)만 사용 가능합니다.");
-        return;
-      }
-
-      // 파일 크기 검증
-      if (file.size > IMAGE_CONSTRAINTS.MAX_SIZE) {
-        alert("파일 크기는 5MB 이하여야 합니다.");
-        return;
-      }
-
-      // 이미지 크기 검증
-      const img = document.createElement("img");
-      img.onload = () => {
-        if (
-          img.naturalWidth > IMAGE_CONSTRAINTS.MAX_WIDTH ||
-          img.naturalHeight > IMAGE_CONSTRAINTS.MAX_HEIGHT
-        ) {
-          alert(
-            `이미지 크기는 ${IMAGE_CONSTRAINTS.MAX_WIDTH}x${IMAGE_CONSTRAINTS.MAX_HEIGHT} 이하여야 합니다.`
-          );
-          return;
-        }
-
-        // 이미지 검증 통과 시 업로드 실행
-        uploadImage(file, {
-          onSuccess: (data) => {
-            setSelectedImage(data.url);
-            console.log("이미지 업로드 성공:", data.url);
-          },
-          onError: (error: any) => {
-            console.error("이미지 업로드 실패:", error);
-
-            const errorMessage = getErrorMessage(error);
-            alert(errorMessage);
-          },
-        });
-      };
-      img.src = URL.createObjectURL(file);
-    },
-    [uploadImage]
-  );
-
-  const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        handleImageUpload(file);
-      }
-    },
-    [handleImageUpload]
-  );
-
-  const handleEditClick = useCallback(() => {
-    if (!editName.trim()) {
-      alert("제목을 입력해주세요.");
-      return;
-    }
-
-    if (isEdit) {
-      // 수정 완료
-      if (!id || !itemId) return;
-
-      updateTodo(
-        {
-          id: id,
-          payload: {
-            id: Number(itemId),
-            imageUrl: selectedImage || undefined,
-            name: editName,
-            memo: editMemo || "",
-          },
+  const handleEditClick = () => {
+    updateTodo(
+      {
+        tenantId,
+        itemId: Number(itemId),
+        payload: {
+          name,
+          isCompleted,
+          memo,
+          imageUrl,
         },
-        {
-          onSuccess: () => {
-            router.push("/");
-          },
-          onError: (error) => {
-            console.error("Todo 수정 실패:", error);
-          },
-        }
-      );
-      setSelectedImage(null);
-    }
-
-    setIsEdit(!isEdit);
-  }, [
-    isEdit,
-    editName,
-    editMemo,
-    selectedImage,
-    id,
-    itemId,
-    updateTodo,
-    router,
-  ]);
-
-  const handleImageButtonClick = useCallback(() => {
-    setIsEdit(true);
-    fileInputRef.current?.click();
-  }, []);
-
-  const getErrorMessage = (error: any): string => {
-    if (error.response?.status === 500) {
-      return "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
-    } else if (error.response?.status === 413) {
-      return "파일이 너무 큽니다.";
-    } else if (error.response?.status === 400) {
-      return "잘못된 요청입니다.";
-    }
-    return "이미지 업로드에 실패했습니다.";
-  };
-
-  const renderImage = () => {
-    if (selectedImage) {
-      return (
-        <Image
-          src={selectedImage}
-          alt="selected image preview"
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 384px"
-        />
-      );
-    }
-
-    if (todoDetail?.imageUrl) {
-      return (
-        <Image
-          src={todoDetail.imageUrl}
-          alt="todo image"
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 384px"
-          onError={(e) => {
-            console.error("이미지 로드 실패:", todoDetail.imageUrl);
-            e.currentTarget.style.display = "none";
-          }}
-        />
-      );
-    }
-
-    return (
-      <Image
-        src={emptyImage}
-        alt="emptyImage"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-      />
-    );
-  };
-
-  const renderMemoSection = () => (
-    <div className="relative">
-      <div className="lg:w-[588px] w-full h-[311px] overflow-hidden rounded-2xl relative">
-        <span className="absolute top-6 left-1/2 -translate-x-1/2 font-extrabold text-amber-800">
-          Memo
-        </span>
-        <Image src={memo} alt="memo" className="w-full h-full object-cover" />
-      </div>
-      <div className="lg:w-[588px] w-full h-[311px] overflow-hidden rounded-2xl flex items-center justify-center absolute top-0 left-0 pt-[58px]">
-        {isEdit ? (
-          <textarea
-            ref={textareaRef}
-            value={editMemo || ""}
-            onChange={handleMemoChange}
-            className="h-full z-10 text-center px-4 resize-none w-full focus:outline-none"
-            placeholder="메모를 입력하세요..."
-          />
-        ) : (
-          <div className="h-full text-center px-4 w-full break-words">
-            {editMemo}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  const handleDeleteClick = useCallback(() => {
-    if (!id || !itemId) return;
-    deleteTodo(
-      { id: id, itemId: Number(itemId) },
+      },
       {
         onSuccess: () => {
           router.push("/");
         },
       }
     );
-  }, [id, itemId, deleteTodo]);
+  };
+
+  const handleDeleteClick = () => {
+    deleteTodo(
+      { tenantId, itemId: Number(itemId) },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (todoDetail) {
+      setMemo(todoDetail?.memo || "");
+      setIsCompleted(todoDetail?.isCompleted);
+      setName(todoDetail?.name);
+      setImageUrl(todoDetail?.imageUrl || "");
+      setIsActive(false);
+    }
+  }, [todoDetail]);
+
+  useEffect(() => {
+    if (todoDetail) {
+      if (
+        isCompleted !== todoDetail.isCompleted ||
+        name !== todoDetail.name ||
+        (memo || "") !== (todoDetail.memo || "") ||
+        imageUrl !== todoDetail.imageUrl
+      ) {
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
+    }
+  }, [
+    isCompleted,
+    todoDetail?.isCompleted,
+    name,
+    todoDetail?.name,
+    memo,
+    todoDetail?.memo,
+    imageUrl,
+    todoDetail?.imageUrl,
+  ]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!validateFile(file)) {
+        return;
+      }
+      uploadImage(
+        { tenantId, file },
+        {
+          onSuccess: (url) => {
+            setImageUrl(url.url);
+          },
+        }
+      );
+    }
+  };
+
+  const validateFile = (file: File) => {
+    const regex = /^[a-zA-Z0-9._-]+$/;
+    if (!regex.test(file.name)) {
+      alert("파일 이름은 영어, 숫자만 사용 가능합니다.");
+      return false;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert("파일 크기는 5MB 이하여야 합니다.");
+      return false;
+    }
+    return true;
+  };
 
   return (
     <section className="flex flex-col gap-6">
+      {(isUpdatePending || isDeletePending) && (
+        <div className="w-screen h-screen fixed top-0 left-0 bg-black/50 z-10 flex items-center justify-center">
+          <div className="size-10 rounded-full border-2 border-slate-200 border-t-slate-400 animate-spin" />
+        </div>
+      )}
       <CheckListDetail
-        name={editName}
-        isCompleted={todoDetail?.isCompleted}
-        isEdit={isEdit}
-        value={editName}
-        onChange={handleNameChange}
+        isCompleted={isCompleted}
         onClick={handleToggleComplete}
+        value={name}
+        onChange={handleNameChange}
+        isPending={isPending}
       />
 
       <div className="lg:flex lg:flex-row lg:justify-between flex flex-col gap-6">
         <div
-          className="lg:w-[384px] w-full h-[311px] rounded-2xl bg-slate-50 relative overflow-hidden"
+          className="lg:w-[384px] w-full h-[311px] rounded-2xl bg-slate-50 relative overflow-hidden flex items-center justify-center"
           style={
-            selectedImage || todoDetail?.imageUrl
+            imageUrl
               ? {
                   borderColor: "#CBD5E1",
                   borderStyle: "solid",
-                  borderWidth: "1px",
+                  borderWidth: "2px",
                 }
               : {
                   borderColor: "#CBD5E1",
@@ -295,40 +175,80 @@ const DetailSection = () => {
                 }
           }
         >
-          {renderImage()}
-
+          {(isPending || isUploadPending) && (
+            <div className="w-full h-[311px] bg-slate-50/30 absolute z-10 flex items-center justify-center">
+              <div className="size-10 rounded-full border-2 border-slate-200 border-t-slate-400 animate-spin" />
+            </div>
+          )}
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt="image"
+              fill
+              className="object-contain"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <Image src={emptyImage} alt="empty" />
+          )}
           <input
             type="file"
+            accept="image/*"
             hidden
             ref={fileInputRef}
-            accept="image/*"
             onChange={handleFileChange}
           />
-
           <AddImageButton
-            variant={todoDetail?.imageUrl ? "edit" : "attach"}
+            variant={imageUrl ? "edit" : "attach"}
             icon={
-              todoDetail?.imageUrl ? (
+              imageUrl ? (
                 <icons.Edit />
               ) : (
                 <icons.Plus stroke="#64748B" width="24px" height="24px" />
               )
             }
             className="absolute bottom-4 right-4"
-            onClick={handleImageButtonClick}
+            onClick={() => {
+              fileInputRef.current?.click();
+            }}
           />
         </div>
-        {renderMemoSection()}
+        <div className="relative">
+          <div className="lg:w-[588px] w-full h-[311px] overflow-hidden rounded-2xl relative">
+            <span className="absolute top-6 left-1/2 -translate-x-1/2 font-extrabold text-amber-800">
+              Memo
+            </span>
+            <Image
+              src={memoImage}
+              alt="memo"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="lg:w-[588px] w-full h-[311px] overflow-hidden rounded-2xl flex items-center justify-center absolute top-0 left-0 pt-[58px]">
+            {isPending && (
+              <div className="w-full h-full flex items-center justify-center absolute top-0 left-0">
+                <div className="size-10 rounded-full border-2 border-slate-200 border-t-slate-300 animate-spin" />
+              </div>
+            )}
+            <textarea
+              value={memo}
+              onChange={(e) => setMemo(e.target.value)}
+              className="h-full z-10 text-center px-4 resize-none w-full focus:outline-none"
+              placeholder={isPending ? "" : "메모를 입력하세요..."}
+            />
+          </div>
+        </div>
       </div>
       <div className="flex justify-end md:gap-4 gap-[7px]">
         <Button
-          color={isEdit ? "lime" : "default"}
+          color={isActive ? "lime" : "default"}
           icon={<icons.Check />}
           className="!w-[162px] !h-14"
           textClassName="!block"
           onClick={handleEditClick}
+          disabled={!isActive}
         >
-          수정 {isEdit ? "완료" : "하기"}
+          수정 완료
         </Button>
         <Button
           color="rose"

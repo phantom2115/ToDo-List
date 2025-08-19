@@ -1,16 +1,16 @@
 import { getTodoDetail, getTodoList } from "../todo.api";
 import QueryKeys from "@/apis/query-keys";
+import { getTodoListPayload } from "@/types/todo";
 
 export const useTodoListQuery = (
-  id: string,
-  page: number,
-  pageSize: number
+  tenantId: string,
+  payload: getTodoListPayload
 ) => ({
-  queryKey: QueryKeys.todo.list(id, page, pageSize),
-  queryFn: () => getTodoList(id, { page, pageSize }),
+  queryKey: QueryKeys.todo.all,
+  queryFn: () => getTodoList(tenantId, payload),
 });
 
-export const useTodoDetailQuery = (id: string, itemId: number) => ({
-  queryKey: QueryKeys.todo.detail(id, itemId),
-  queryFn: () => getTodoDetail(id, itemId),
+export const useTodoDetailQuery = (tenantId: string, itemId: number) => ({
+  queryKey: QueryKeys.todo.detail(tenantId, itemId),
+  queryFn: () => getTodoDetail(tenantId, itemId),
 });

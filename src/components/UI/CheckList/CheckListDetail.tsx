@@ -4,21 +4,19 @@ import unChecked from "../../../assets/icons/checkbox-unchecked.svg";
 import { cn } from "@/lib/utils";
 
 interface CheckListDetailProps {
-  name: string;
   isCompleted: boolean;
-  isEdit: boolean;
   onClick: () => void;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isPending: boolean;
 }
 
 const CheckListDetail = ({
-  name,
   isCompleted,
-  isEdit,
   onClick,
   value,
   onChange,
+  isPending,
 }: CheckListDetailProps) => {
   return (
     <div
@@ -28,29 +26,26 @@ const CheckListDetail = ({
         isCompleted ? "bg-violet-100" : "bg-white"
       )}
     >
-      <div className="flex items-center gap-4">
-        <button onClick={onClick} className="size-8 shrink-0 cursor-pointer">
-          <Image src={isCompleted ? checked : unChecked} alt="unChecked" />
-        </button>
-        {isEdit ? (
+      {isPending ? (
+        <div className="flex items-center gap-4">
+          <div className="size-8 shrink-0 rounded-full bg-slate-300 animate-[pulse_2s_ease-in-out_infinite]"></div>{" "}
+          <div className="w-[217px] h-[31px] bg-slate-300 rounded-lg animate-[pulse_2s_ease-in-out_infinite]"></div>
+        </div>
+      ) : (
+        <div className="flex items-center gap-4">
+          <button onClick={onClick} className="size-8 shrink-0 cursor-pointer">
+            <Image src={isCompleted ? checked : unChecked} alt="unChecked" />
+          </button>
+
           <input
             type="text"
             value={value}
             onChange={onChange}
-            className="w-full shrink-0 text-slate-900 text-[20px] font-bold bg-transparent border-none outline-none focus:outline-none"
+            className="pl-2 text-slate-900 text-[20px] font-bold bg-transparent border-b outline-none focus:outline-none"
             autoFocus
           />
-        ) : (
-          <div
-            className={cn(
-              "text-slate-900 text-[20px] font-bold truncate",
-              isCompleted && "underline"
-            )}
-          >
-            {name}
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
