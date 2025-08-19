@@ -26,7 +26,14 @@ const SearchSection = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    if (name.length > 100) {
+      alert("100자 이내로 입력해주세요.");
+      return;
+    }
+    if (!name.trim()) {
+      alert("할 일을 입력해주세요.");
+      return;
+    }
     createTodo(
       { payload: { name } },
       {

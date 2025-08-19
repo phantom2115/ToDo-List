@@ -74,6 +74,18 @@ const DetailSection = () => {
   };
 
   const handleEditClick = () => {
+    if (name.length > 100) {
+      alert("100자 이내로 입력해주세요.");
+      return;
+    }
+    if (!name.trim()) {
+      alert("할 일을 입력해주세요.");
+      return;
+    }
+    if (memo.length > 1000) {
+      alert("1000자 이내로 입력해주세요.");
+      return;
+    }
     updateTodo(
       {
         itemId: Number(itemId),
