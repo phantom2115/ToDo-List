@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Button from "../UI/Button/Button";
 import icons from "@/assets/icons";
 import CheckListDetail from "../UI/CheckList/CheckListDetail";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useTodoDetailQuery } from "@/apis/todo/queries/todo.query-options";
@@ -16,15 +16,32 @@ import emptyImage from "../../assets/images/img.svg";
 import { TENANT_ID } from "@/constant/api";
 import { Typography } from "../UI/Typography";
 import { cn } from "@/lib/utils";
+import { isAxiosError } from "axios";
 
 const DetailSection = () => {
   const router = useRouter();
 
   const { itemId } = useParams<{ itemId: string }>();
 
-  const { data: todoDetail, isPending } = useQuery(
-    useTodoDetailQuery(Number(itemId))
-  );
+  const {
+    data: todoDetail,
+    isPending,
+    error,
+    isError,
+  } = useQuery(useTodoDetailQuery(Number(itemId)));
+
+  if (isError) {
+    if (isAxiosError(error)) {
+      switch (error.status) {
+        case 404:
+          notFound();
+          break;
+      }
+    }
+
+    throw new Error("데이터를 불러오는데 실패했습니다.");
+  }
+
   const { mutate: updateTodo, isPending: isUpdatePending } =
     useUpdateTodoMutation();
 

@@ -10,7 +10,13 @@ import { Plus } from "../../assets/icons/Plus";
 
 const SearchSection = () => {
   const [name, setName] = useState("");
-  const { data } = useQuery(useTodoListQuery({ page: 1, pageSize: 100000 }));
+  const { data, isError } = useQuery(
+    useTodoListQuery({ page: 1, pageSize: 100000 })
+  );
+
+  if (isError) {
+    throw new Error("데이터를 불러오는데 실패했습니다.");
+  }
 
   const { mutate: createTodo, isPending } = useCreateTodoMutation();
 
