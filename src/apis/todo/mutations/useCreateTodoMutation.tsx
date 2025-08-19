@@ -10,13 +10,8 @@ export const useCreateTodoMutation = () => {
 
   return useMutation({
     mutationKey: [MutationKeys.todo.create],
-    mutationFn: ({
-      tenantId,
-      payload,
-    }: {
-      tenantId: string;
-      payload: createTodoPayload;
-    }) => createTodo(tenantId, payload),
+    mutationFn: ({ payload }: { payload: createTodoPayload }) =>
+      createTodo(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QueryKeys.todo.all });
     },

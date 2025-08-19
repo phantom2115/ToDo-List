@@ -1,16 +1,13 @@
 import Image from "next/image";
-import { useUserStore } from "@/store/userStore";
 import { useUpdateTodoMutation } from "@/apis/todo/mutations/useUpdateTodoMutation";
 import { useRouter } from "next/navigation";
 import { Todo } from "@/types/todo";
 import CheckList from "../CheckList/CheckList";
 import todo from "../../../assets/images/todo.svg";
 import done from "../../../assets/images/done.svg";
-import { useIsFetching, useIsMutating } from "@tanstack/react-query";
-import MutationKeys from "@/apis/mutation-keys";
+import { useIsFetching } from "@tanstack/react-query";
 import ListSkeleton from "./ListSkeleton";
 import QueryKeys from "@/apis/query-keys";
-import { useCreateTodoMutation } from "@/apis/todo/mutations/useCreateTodoMutation";
 
 interface ListProps {
   type: typeof todo | typeof done;
@@ -29,7 +26,6 @@ const List = ({
   emptyImageSm,
   emptyImageLg,
 }: ListProps) => {
-  const { tenantId: id } = useUserStore();
   const { mutate: updateTodo } = useUpdateTodoMutation();
   const router = useRouter();
 
@@ -50,7 +46,6 @@ const List = ({
               isCompleted={item.isCompleted}
               checkboxClick={() => {
                 updateTodo({
-                  tenantId: id,
                   itemId: item.id,
                   payload: {
                     isCompleted: !item.isCompleted,

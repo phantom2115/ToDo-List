@@ -1,4 +1,4 @@
-import { Base_URL } from "@/constant/api";
+import { BASE_URL } from "@/constant/api";
 import {
   createTodoPayload,
   createTodoResponse,
@@ -9,51 +9,41 @@ import {
   updateTodoPayload,
   updateTodoResponse,
 } from "@/types/todo";
-import axios from "axios";
+import instance from "../api";
 
-export const getTodoList = async (
-  tenantId: string,
-  payload: getTodoListPayload
-) => {
-  const response = await axios.get<Todo[]>(`${Base_URL}/${tenantId}/items`, {
+export const getTodoList = async (payload: getTodoListPayload) => {
+  const response = await instance.get<Todo[]>(`/items`, {
     params: payload,
   });
   return response.data;
 };
 
-export const createTodo = async (
-  tenantId: string,
-  payload: createTodoPayload
-) => {
-  const response = await axios.post<createTodoResponse>(
-    `${Base_URL}/${tenantId}/items`,
-    payload
-  );
+export const createTodo = async (payload: createTodoPayload) => {
+  const response = await instance.post<createTodoResponse>(`/items`, payload);
   return response.data;
 };
 
 export const updateTodo = async (
-  tenantId: string,
   itemId: number,
   payload: updateTodoPayload
 ) => {
-  const response = await axios.patch<updateTodoResponse>(
-    `${Base_URL}/${tenantId}/items/${itemId}`,
+  const response = await instance.patch<updateTodoResponse>(
+    `/items/${itemId}`,
     payload
   );
   return response.data;
 };
 
-export const getTodoDetail = async (tenantId: string, itemId: number) => {
-  const response = await axios.get<getTodoDetailResponse>(
-    `${Base_URL}/${tenantId}/items/${itemId}`
+export const getTodoDetail = async (itemId: number) => {
+  const response = await instance.get<getTodoDetailResponse>(
+    `/items/${itemId}`
   );
   return response.data;
 };
 
-export const deleteTodo = async (tenantId: string, itemId: number) => {
-  const response = await axios.delete<deleteTodoResponse>(
-    `${Base_URL}/${tenantId}/items/${itemId}`
+export const deleteTodo = async (itemId: number) => {
+  const response = await instance.delete<deleteTodoResponse>(
+    `/items/${itemId}`
   );
   return response.data;
 };

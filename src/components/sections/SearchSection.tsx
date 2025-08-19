@@ -1,8 +1,7 @@
 "use client";
 
 import { useCreateTodoMutation } from "@/apis/todo/mutations/useCreateTodoMutation";
-import { useTodoListQuery } from "@/apis/todo/querys/todo.query-options";
-import { useUserStore } from "@/store/userStore";
+import { useTodoListQuery } from "@/apis/todo/queries/todo.query-options";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import SearchBar from "@/components/UI/Search/SearchBar";
@@ -10,11 +9,8 @@ import Button from "@/components/UI/Button/Button";
 import { Plus } from "../../assets/icons/Plus";
 
 const SearchSection = () => {
-  const { tenantId } = useUserStore();
   const [name, setName] = useState("");
-  const { data } = useQuery(
-    useTodoListQuery(tenantId, { page: 1, pageSize: 100000 })
-  );
+  const { data } = useQuery(useTodoListQuery({ page: 1, pageSize: 100000 }));
 
   const { mutate: createTodo, isPending } = useCreateTodoMutation();
 
@@ -26,7 +22,7 @@ const SearchSection = () => {
     e.preventDefault();
     if (!name.trim()) return;
     createTodo(
-      { tenantId, payload: { name } },
+      { payload: { name } },
       {
         onSuccess: () => {
           setName("");

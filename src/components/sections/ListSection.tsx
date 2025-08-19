@@ -5,15 +5,11 @@ import emptyDoneLg from "../../assets/images/donelg.svg";
 import emptyTodoSm from "../../assets/images/todosm.svg";
 import emptyTodoLg from "../../assets/images/todolg.svg";
 import { useQuery } from "@tanstack/react-query";
-import { useTodoListQuery } from "../../apis/todo/querys/todo.query-options";
-import { useUserStore } from "../../store/userStore";
+import { useTodoListQuery } from "../../apis/todo/queries/todo.query-options";
 import List from "../UI/List/List";
 
 const ListSection = () => {
-  const { tenantId } = useUserStore();
-  const { data } = useQuery(
-    useTodoListQuery(tenantId, { page: 1, pageSize: 100000 })
-  );
+  const { data } = useQuery(useTodoListQuery({ page: 1, pageSize: 100000 }));
   return (
     <section className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-6">
       <List

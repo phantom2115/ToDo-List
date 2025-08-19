@@ -5,8 +5,7 @@ import CheckListDetail from "../UI/CheckList/CheckListDetail";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { useTodoDetailQuery } from "@/apis/todo/querys/todo.query-options";
-import { useUserStore } from "@/store/userStore";
+import { useTodoDetailQuery } from "@/apis/todo/queries/todo.query-options";
 import { useUpdateTodoMutation } from "@/apis/todo/mutations/useUpdateTodoMutation";
 import { useDeleteTodoMutation } from "@/apis/todo/mutations/useDeleteTodoMutation";
 import Image from "next/image";
@@ -14,15 +13,14 @@ import memoImage from "../../assets/images/memo.svg";
 import AddImageButton from "../UI/Button/AddImageButton";
 import { useUploadImageMutation } from "@/apis/image/mutations/useUploadImageMutation";
 import emptyImage from "../../assets/images/img.svg";
+import { TENANT_ID } from "@/constant/api";
 const DetailSection = () => {
   const router = useRouter();
-
-  const { tenantId } = useUserStore();
 
   const { itemId } = useParams<{ itemId: string }>();
 
   const { data: todoDetail, isPending } = useQuery(
-    useTodoDetailQuery(tenantId, Number(itemId))
+    useTodoDetailQuery(Number(itemId))
   );
   const { mutate: updateTodo, isPending: isUpdatePending } =
     useUpdateTodoMutation();
@@ -51,7 +49,6 @@ const DetailSection = () => {
   const handleEditClick = () => {
     updateTodo(
       {
-        tenantId,
         itemId: Number(itemId),
         payload: {
           name,
@@ -70,7 +67,7 @@ const DetailSection = () => {
 
   const handleDeleteClick = () => {
     deleteTodo(
-      { tenantId, itemId: Number(itemId) },
+      { itemId: Number(itemId) },
       {
         onSuccess: () => {
           router.push("/");
@@ -120,7 +117,7 @@ const DetailSection = () => {
         return;
       }
       uploadImage(
-        { tenantId, file },
+        { tenantId: TENANT_ID, file },
         {
           onSuccess: (url) => {
             setImageUrl(url.url);
