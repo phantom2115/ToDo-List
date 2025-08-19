@@ -13,6 +13,7 @@ import { useUpdateTodoMutation } from "../../apis/todo/mutations/useUpdateTodoMu
 import { useUploadImageMutation } from "../../apis/image/mutations/useUploadImageMutation";
 import { useRouter } from "next/navigation";
 import { useDeleteTodoMutation } from "../../apis/todo/mutations/useDeleteTodoMutation";
+import { useUserStore } from "@/store/userStore";
 
 const IMAGE_CONSTRAINTS = {
   MAX_SIZE: 5 * 1024 * 1024, // 5MB
@@ -26,7 +27,7 @@ const DetailSection = () => {
   const router = useRouter();
   const { itemId } = useParams<{ itemId: string }>();
 
-  const [id, setId] = useState<number | null>(null);
+  const { id } = useUserStore();
   const [isEdit, setIsEdit] = useState(false);
   const [editName, setEditName] = useState<string>("");
   const [editMemo, setEditMemo] = useState<string>("");
@@ -35,18 +36,10 @@ const DetailSection = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { data: todoDetail } = useQuery(
-    useTodoDetailQuery(Number(id), Number(itemId))
-  );
+  const { data: todoDetail } = useQuery(useTodoDetailQuery(id, Number(itemId)));
   const { mutate: updateTodo } = useUpdateTodoMutation();
-  const { mutate: uploadImage } = useUploadImageMutation(Number(id));
+  const { mutate: uploadImage } = useUploadImageMutation(id);
   const { mutate: deleteTodo } = useDeleteTodoMutation();
-  useEffect(() => {
-    const storedId = localStorage.getItem("id");
-    if (storedId) {
-      setId(Number(storedId));
-    }
-  }, []);
 
   useEffect(() => {
     if (todoDetail) {
@@ -73,7 +66,7 @@ const DetailSection = () => {
     if (!id || !itemId) return;
 
     updateTodo({
-      id: Number(id),
+      id: id,
       payload: {
         id: Number(itemId),
         isCompleted: !todoDetail?.isCompleted,
@@ -149,7 +142,7 @@ const DetailSection = () => {
 
       updateTodo(
         {
-          id: Number(id),
+          id: id,
           payload: {
             id: Number(itemId),
             imageUrl: selectedImage || undefined,
@@ -264,7 +257,7 @@ const DetailSection = () => {
   const handleDeleteClick = useCallback(() => {
     if (!id || !itemId) return;
     deleteTodo(
-      { id: Number(id), itemId: Number(itemId) },
+      { id: id, itemId: Number(itemId) },
       {
         onSuccess: () => {
           router.push("/");

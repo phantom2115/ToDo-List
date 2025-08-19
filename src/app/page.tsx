@@ -11,12 +11,10 @@ const page = () => {
     const existingId = localStorage.getItem("id");
 
     if (existingId) {
-      setId(Number(existingId));
+      setId("phantom2115");
     } else {
-      const getRandomId = Math.floor(Math.random() * 1000000);
-      const newId = getRandomId.toString();
-      localStorage.setItem("id", newId);
-      setId(Number(newId));
+      localStorage.setItem("id", "phantom2115");
+      setId("phantom2115");
     }
   }, [setId]);
 

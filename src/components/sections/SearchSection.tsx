@@ -11,7 +11,7 @@ import { Plus } from "../../assets/icons/Plus";
 
 const SearchSection = () => {
   const { id } = useUserStore();
-  const { data } = useQuery(useTodoListQuery(Number(id), 1, 100000));
+  const { data } = useQuery(useTodoListQuery(id, 1, 100000));
   const [value, setValue] = useState("");
   const { mutate: createTodo } = useCreateTodoMutation();
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,7 @@ const SearchSection = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (!value.trim()) return;
     e.preventDefault();
-    createTodo({ id: Number(id), payload: { name: value } });
+    createTodo({ id, payload: { name: value } });
     setValue("");
   };
 

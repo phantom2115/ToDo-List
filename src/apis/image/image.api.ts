@@ -1,7 +1,7 @@
 import { Base_URL } from "@/constant/api";
 import axios from "axios";
 
-export const uploadImage = async (id: number, file: File) => {
+export const uploadImage = async (id: string, file: File) => {
   try {
     const formData = new FormData();
     formData.append("image", file);

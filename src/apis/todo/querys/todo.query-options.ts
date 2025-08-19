@@ -2,7 +2,7 @@ import { getTodoDetail, getTodoList } from "../todo.api";
 import QueryKeys from "@/apis/query-keys";
 
 export const useTodoListQuery = (
-  id: number,
+  id: string,
   page: number,
   pageSize: number
 ) => ({
@@ -10,7 +10,7 @@ export const useTodoListQuery = (
   queryFn: () => getTodoList(id, { page, pageSize }),
 });
 
-export const useTodoDetailQuery = (id: number, itemId: number) => ({
+export const useTodoDetailQuery = (id: string, itemId: number) => ({
   queryKey: QueryKeys.todo.detail(id, itemId),
   queryFn: () => getTodoDetail(id, itemId),
 });

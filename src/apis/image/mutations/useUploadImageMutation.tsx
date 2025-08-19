@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { uploadImage } from "../image.api";
 
-export const useUploadImageMutation = (id: number) => {
+export const useUploadImageMutation = (id: string) => {
   return useMutation({
     mutationFn: (file: File) => uploadImage(id, file),
     onSuccess: (data) => {
