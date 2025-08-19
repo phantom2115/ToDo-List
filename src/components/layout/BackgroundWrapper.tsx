@@ -5,9 +5,5 @@ interface BackgroundWrapperProps {
 export default function BackgroundWrapper({
   children,
 }: BackgroundWrapperProps) {
-  return (
-    <div className="min-h-screen lg:px-[360px] md:px-6 px-4 bg-gray-50">
-      {children}
-    </div>
-  );
+  return <div className="min-h-screen pt-15 flex flex-col">{children}</div>;
 }
