@@ -14,7 +14,7 @@ export default function BackgroundWrapper({
 
   return (
     <div
-      className={`lg:px-[360px] md:px-6 px-4 ${
+      className={`lg:px-[360px] md:px-6 px-4 pb-10 ${
         isDetailPage && "lg:bg-[#F9FAFB]"
       }`}
     >
