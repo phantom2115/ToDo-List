@@ -41,7 +41,7 @@ const CheckListDetail = ({
             type="text"
             value={value}
             onChange={onChange}
-            className="pl-2 text-slate-900 text-[20px] font-bold bg-transparent border-b outline-none focus:outline-none"
+            className="w-[217px] pl-2 text-slate-900 text-[20px] font-bold bg-transparent border-b outline-none focus:outline-none"
             autoFocus
           />
         </div>
