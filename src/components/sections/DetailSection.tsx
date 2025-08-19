@@ -237,7 +237,7 @@ const DetailSection = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-end md:gap-4 gap-[7px]">
+      <div className="flex justify-end md:gap-4 gap-[7px] pb-6">
         <Button
           color={isActive ? "lime" : "default"}
           icon={<icons.Check />}

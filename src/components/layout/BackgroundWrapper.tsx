@@ -1,8 +1,3 @@
-"use client";
-
-import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
-
 interface BackgroundWrapperProps {
   children: React.ReactNode;
 }
@@ -10,16 +5,8 @@ interface BackgroundWrapperProps {
 export default function BackgroundWrapper({
   children,
 }: BackgroundWrapperProps) {
-  const pathname = usePathname();
-  const isDetailPage = pathname.includes("/items/");
-
   return (
-    <div
-      className={cn(
-        "lg:px-[360px] md:px-6 px-4 pb-10",
-        isDetailPage && "lg:bg-[#F9FAFB]"
-      )}
-    >
+    <div className="min-h-screen lg:px-[360px] md:px-6 px-4 bg-gray-50">
       {children}
     </div>
   );
