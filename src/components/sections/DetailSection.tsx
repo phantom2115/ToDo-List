@@ -14,6 +14,7 @@ import AddImageButton from "../UI/Button/AddImageButton";
 import { useUploadImageMutation } from "@/apis/image/mutations/useUploadImageMutation";
 import emptyImage from "../../assets/images/img.svg";
 import { TENANT_ID } from "@/constant/api";
+import { Typography } from "../UI/Typography";
 const DetailSection = () => {
   const router = useRouter();
 
@@ -213,9 +214,12 @@ const DetailSection = () => {
         </div>
         <div className="relative">
           <div className="lg:w-[588px] w-full h-[311px] overflow-hidden rounded-2xl relative">
-            <span className="absolute top-6 left-1/2 -translate-x-1/2 font-extrabold text-amber-800">
+            <Typography
+              variant="h3"
+              className="absolute top-6 left-1/2 -translate-x-1/2 text-amber-800"
+            >
               Memo
-            </span>
+            </Typography>
             <Image
               src={memoImage}
               alt="memo"
@@ -228,12 +232,14 @@ const DetailSection = () => {
                 <div className="size-10 rounded-full border-2 border-slate-200 border-t-slate-300 animate-spin" />
               </div>
             )}
-            <textarea
-              value={memo}
-              onChange={(e) => setMemo(e.target.value)}
-              className="h-full z-10 text-center px-4 resize-none w-full focus:outline-none"
-              placeholder={isPending ? "" : "메모를 입력하세요..."}
-            />
+            <Typography variant="body2" className="h-full z-10 px-4 w-full">
+              <textarea
+                value={memo}
+                onChange={(e) => setMemo(e.target.value)}
+                className="h-full w-full bg-transparent border-none outline-none focus:outline-none resize-none text-center"
+                placeholder={isPending ? "" : "메모를 입력하세요..."}
+              />
+            </Typography>
           </div>
         </div>
       </div>

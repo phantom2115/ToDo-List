@@ -1,6 +1,7 @@
 import { cn } from "../../../lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import React, { ButtonHTMLAttributes } from "react";
+import { Typography } from "../Typography";
 
 const buttonVariants = cva(
   cn(
@@ -22,17 +23,14 @@ const buttonVariants = cva(
   }
 );
 
-const textColorVariants = cva(
-  "md:flex items-center justify-center text-[16px] font-bold leading-none hidden",
-  {
-    variants: {
-      textColor: {
-        default: "text-slate-900",
-        white: "text-white",
-      },
+const textColorVariants = cva("md:flex items-center justify-center hidden", {
+  variants: {
+    textColor: {
+      default: "text-slate-900",
+      white: "text-white",
     },
-  }
-);
+  },
+});
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color">,
@@ -58,9 +56,12 @@ const Button = ({
     <button className={cn(buttonVariants({ color }), className)} {...props}>
       <div className="flex items-center justify-center gap-2">
         <span className="flex items-center justify-center">{icon}</span>
-        <span className={cn(textColorVariants({ textColor }), textClassName)}>
+        <Typography
+          variant="body1"
+          className={cn(textColorVariants({ textColor }), textClassName)}
+        >
           {children}
-        </span>
+        </Typography>
       </div>
     </button>
   );

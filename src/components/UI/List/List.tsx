@@ -8,6 +8,7 @@ import done from "../../../assets/images/done.svg";
 import { useIsFetching } from "@tanstack/react-query";
 import ListSkeleton from "./ListSkeleton";
 import QueryKeys from "@/apis/query-keys";
+import { Typography } from "../Typography";
 
 interface ListProps {
   type: typeof todo | typeof done;
@@ -65,11 +66,11 @@ const List = ({
             <div className="size-30 flex items-center justify-center md:hidden">
               <Image src={emptyImageSm} alt="empty" />
             </div>
-            <span className="text-center font-bold text-[16px] text-slate-400">
+            <Typography variant="body1" className="text-center text-slate-400">
               {emptyMessage}
               <br />
               {guideMessage}
-            </span>
+            </Typography>
           </div>
         )}
       </div>

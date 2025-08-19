@@ -2,6 +2,7 @@ import Image from "next/image";
 import checked from "../../../assets/icons/checkbox-checked.svg";
 import unChecked from "../../../assets/icons/checkbox-unchecked.svg";
 import { cn } from "@/lib/utils";
+import { Typography } from "../Typography";
 
 interface CheckListDetailProps {
   isCompleted: boolean;
@@ -37,13 +38,19 @@ const CheckListDetail = ({
             <Image src={isCompleted ? checked : unChecked} alt="unChecked" />
           </button>
 
-          <input
-            type="text"
-            value={value}
-            onChange={onChange}
-            className="w-[217px] pl-2 text-slate-900 text-[20px] font-bold bg-transparent border-b outline-none focus:outline-none"
-            autoFocus
-          />
+          <Typography
+            variant="h1"
+            className="w-[217px] pl-2 bg-transparent border-b outline-none focus:outline-none"
+          >
+            <input
+              id="check-list-detail"
+              type="text"
+              value={value}
+              onChange={onChange}
+              className="w-full bg-transparent border-none outline-none focus:outline-none"
+              autoFocus
+            />
+          </Typography>
         </div>
       )}
     </div>
