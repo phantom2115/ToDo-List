@@ -11,7 +11,7 @@ import List from "../UI/List/List";
 const ListSection = () => {
   const { data } = useQuery(useTodoListQuery({ page: 1, pageSize: 100000 }));
   return (
-    <section className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-6">
+    <section className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-6 pb-6">
       <List
         type={todo}
         items={data?.filter((item) => !item.isCompleted)}
