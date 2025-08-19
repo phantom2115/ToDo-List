@@ -16,6 +16,7 @@ import { useUploadImageMutation } from "@/apis/image/mutations/useUploadImageMut
 import emptyImage from "../../assets/images/img.svg";
 const DetailSection = () => {
   const router = useRouter();
+
   const { tenantId } = useUserStore();
 
   const { itemId } = useParams<{ itemId: string }>();
@@ -94,7 +95,7 @@ const DetailSection = () => {
         isCompleted !== todoDetail.isCompleted ||
         name !== todoDetail.name ||
         (memo || "") !== (todoDetail.memo || "") ||
-        imageUrl !== todoDetail.imageUrl
+        (imageUrl || "") !== (todoDetail.imageUrl || "")
       ) {
         setIsActive(true);
       } else {
