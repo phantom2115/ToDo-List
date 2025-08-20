@@ -2,6 +2,7 @@
 import { Typography } from "@/components/UI/Typography";
 import React from "react";
 
+// 에러 페이지
 const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
   return (
     <div className="fixed inset-0 w-full min-h-screen overflow-y-hidden flex flex-col items-center justify-center gap-4">

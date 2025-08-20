@@ -1,5 +1,3 @@
-import React from "react";
-
 export const X = ({ stroke = "white", width = "16", height = "16" }) => {
   return (
     <svg

@@ -1,6 +1,7 @@
 import { Typography } from "@/components/UI/Typography";
 import Link from "next/link";
 
+// 404 페이지
 const NotFound = () => {
   return (
     <div className="fixed inset-0 w-full min-h-screen overflow-y-hidden flex flex-col items-center justify-center gap-4">

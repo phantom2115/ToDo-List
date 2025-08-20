@@ -1,4 +1,4 @@
-import React, { ElementType } from "react";
+import { ElementType } from "react";
 import { cn } from "@/lib/utils";
 
 export interface TypographyProps {

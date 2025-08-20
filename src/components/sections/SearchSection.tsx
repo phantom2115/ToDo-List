@@ -9,21 +9,28 @@ import Button from "@/components/UI/Button/Button";
 import { Plus } from "../../assets/icons/Plus";
 
 const SearchSection = () => {
+  // 상태 관리
   const [name, setName] = useState("");
+
+  // 데이터 불러오기
   const { data, isError } = useQuery(
     useTodoListQuery({ page: 1, pageSize: 100000 })
   );
 
+  // 데이터 불러오기 실패 시 처리
   if (isError) {
     throw new Error("데이터를 불러오는데 실패했습니다.");
   }
 
+  // 데이터 생성
   const { mutate: createTodo, isPending } = useCreateTodoMutation();
 
+  // 할 일 이름 입력
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
 
+  // 할 일 추가
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (name.length > 100) {

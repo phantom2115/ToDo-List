@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Check = ({ stroke = "#0F172A", width = "16", height = "16" }) => {
   return (
     <svg

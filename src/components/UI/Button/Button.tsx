@@ -1,6 +1,6 @@
 import { cn } from "../../../lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
-import React, { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes } from "react";
 import { Typography } from "../Typography";
 
 const buttonVariants = cva(
@@ -43,6 +43,7 @@ interface ButtonProps
   children: React.ReactNode;
 }
 
+// 버튼
 const Button = ({
   color,
   className,

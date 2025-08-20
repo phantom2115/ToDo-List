@@ -2,6 +2,7 @@ interface BackgroundWrapperProps {
   children: React.ReactNode;
 }
 
+// 배경 랩퍼
 export default function BackgroundWrapper({
   children,
 }: BackgroundWrapperProps) {

@@ -12,6 +12,7 @@ interface CheckListDetailProps {
   isPending: boolean;
 }
 
+// 체크리스트 상세
 const CheckListDetail = ({
   isCompleted,
   onClick,

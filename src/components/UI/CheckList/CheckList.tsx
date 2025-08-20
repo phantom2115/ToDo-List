@@ -11,6 +11,7 @@ interface CheckListProps {
   onClick: () => void;
 }
 
+// 체크리스트
 const CheckList = ({
   name,
   isCompleted,

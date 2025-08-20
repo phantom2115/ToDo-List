@@ -9,9 +9,12 @@ import { useTodoListQuery } from "../../apis/todo/queries/todo.query-options";
 import List from "../UI/List/List";
 
 const ListSection = () => {
+  // 데이터 불러오기
   const { data, isError } = useQuery(
     useTodoListQuery({ page: 1, pageSize: 100000 })
   );
+
+  // 데이터 불러오기 실패 시 처리
   if (isError) {
     throw new Error("데이터를 불러오는데 실패했습니다.");
   }

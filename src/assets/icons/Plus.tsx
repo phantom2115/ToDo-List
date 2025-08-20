@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Plus = ({
   stroke = "#0F172A",
   width = "16",

@@ -19,6 +19,7 @@ interface ListProps {
   emptyImageLg: any;
 }
 
+// 할 일 목록
 const List = ({
   type,
   items,
@@ -28,11 +29,13 @@ const List = ({
   emptyImageLg,
 }: ListProps) => {
   const { mutate: updateTodo } = useUpdateTodoMutation();
+
   const router = useRouter();
 
   const isListPending = useIsFetching({
     queryKey: QueryKeys.todo.all,
   });
+
   return (
     <div className="flex flex-col gap-4">
       <Image src={type} alt="todo" />

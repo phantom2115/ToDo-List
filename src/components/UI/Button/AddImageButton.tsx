@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "../../../lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
-import React, { ButtonHTMLAttributes, useRef } from "react";
+import { ButtonHTMLAttributes, useRef } from "react";
 
 const ImageButtonVariants = cva(
   "flex items-center justify-center size-16 rounded-full cursor-pointer",
@@ -21,6 +21,7 @@ interface ImageButtonProps
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+// 이미지 추가 및 수정 버튼
 const AddImageButton = ({
   variant,
   icon,

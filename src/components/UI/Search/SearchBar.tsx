@@ -3,6 +3,7 @@ import { Typography } from "../Typography";
 
 interface SearchBarProps extends InputHTMLAttributes<HTMLInputElement> {}
 
+// 할 일 생성 바
 const SearchBar = ({ ...props }: SearchBarProps) => {
   return (
     <Typography

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../UI/Button/Button";
 import icons from "@/assets/icons";
 import CheckListDetail from "../UI/CheckList/CheckListDetail";
@@ -23,6 +23,7 @@ const DetailSection = () => {
 
   const { itemId } = useParams<{ itemId: string }>();
 
+  // 데이터 불러오기
   const {
     data: todoDetail,
     isPending,
@@ -30,6 +31,7 @@ const DetailSection = () => {
     isError,
   } = useQuery(useTodoDetailQuery(Number(itemId)));
 
+  // 데이터 불러오기 실패 시 처리
   if (isError) {
     if (isAxiosError(error)) {
       switch (error.status) {
@@ -42,20 +44,25 @@ const DetailSection = () => {
     throw new Error("데이터를 불러오는데 실패했습니다.");
   }
 
+  // 데이터 수정
   const { mutate: updateTodo, isPending: isUpdatePending } =
     useUpdateTodoMutation();
 
+  // 데이터 삭제
   const { mutate: deleteTodo, isPending: isDeletePending } =
     useDeleteTodoMutation();
 
+  // 이미지 업로드
   const { mutate: uploadImage, isPending: isUploadPending } =
     useUploadImageMutation();
 
+  // 상태 관리
   const [isCompleted, setIsCompleted] = useState(false);
   const [name, setName] = useState("");
   const [memo, setMemo] = useState("");
   const [imageUrl, setImageUrl] = useState<string | string>("");
 
+  // 데이터 불러오기 성공 시 상태 관리
   useEffect(() => {
     if (todoDetail) {
       setMemo(todoDetail?.memo || "");
@@ -65,14 +72,17 @@ const DetailSection = () => {
     }
   }, [todoDetail]);
 
+  // 완료 상태 토글
   const handleToggleComplete = () => {
     setIsCompleted(!isCompleted);
   };
 
+  // 할 일 이름 변경
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
 
+  // 수정 버튼 클릭
   const handleEditClick = () => {
     if (name.length > 100) {
       alert("100자 이내로 입력해주세요.");
@@ -104,6 +114,7 @@ const DetailSection = () => {
     );
   };
 
+  // 삭제 버튼 클릭
   const handleDeleteClick = () => {
     deleteTodo(
       { itemId: Number(itemId) },
@@ -115,6 +126,7 @@ const DetailSection = () => {
     );
   };
 
+  // 이미지 변경
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !validateFile(file)) return;
@@ -129,6 +141,7 @@ const DetailSection = () => {
     );
   };
 
+  // 이미지 유효성 검사
   const validateFile = (file: File) => {
     const regex = /^[a-zA-Z0-9._-]+$/;
     if (!regex.test(file.name)) {
@@ -142,6 +155,7 @@ const DetailSection = () => {
     return true;
   };
 
+  // 수정 버튼 활성화 여부
   const isActive = todoDetail
     ? isCompleted !== todoDetail.isCompleted ||
       name !== todoDetail.name ||

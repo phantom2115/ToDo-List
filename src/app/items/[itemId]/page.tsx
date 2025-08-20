@@ -2,6 +2,7 @@
 import DetailSection from "../../../components/sections/DetailSection";
 import React from "react";
 
+// 할 일 상세 페이지
 const page = () => {
   return (
     <main className="lg:px-[360px] flex-1 bg-gray-50 flex flex-col">
