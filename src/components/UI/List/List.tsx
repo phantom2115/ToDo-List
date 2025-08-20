@@ -5,9 +5,6 @@ import { Todo } from "@/types/todo";
 import CheckList from "../CheckList/CheckList";
 import todo from "../../../assets/images/todo.svg";
 import done from "../../../assets/images/done.svg";
-import { useIsFetching } from "@tanstack/react-query";
-import ListSkeleton from "./ListSkeleton";
-import QueryKeys from "@/apis/query-keys";
 import { Typography } from "../Typography";
 
 interface ListProps {
@@ -32,17 +29,11 @@ const List = ({
 
   const router = useRouter();
 
-  const isListPending = useIsFetching({
-    queryKey: QueryKeys.todo.all,
-  });
-
   return (
     <div className="flex flex-col gap-4">
       <Image src={type} alt="todo" />
       <div className="flex flex-col gap-4 lg:max-h-[600px] max-h-[320px] overflow-y-auto pr-3">
-        {isListPending > 0 ? (
-          <ListSkeleton />
-        ) : items && items.length > 0 ? (
+        {items && items.length > 0 ? (
           items.map((item) => (
             <CheckList
               key={item.id}

@@ -17,6 +17,7 @@ import { TENANT_ID } from "@/constant/api";
 import { Typography } from "../UI/Typography";
 import { cn } from "@/lib/utils";
 import { isAxiosError } from "axios";
+import Loading from "../UI/Loading/Loading";
 
 const DetailSection = () => {
   const router = useRouter();
@@ -165,10 +166,8 @@ const DetailSection = () => {
 
   return (
     <section className="flex flex-col gap-6">
-      {(isUpdatePending || isDeletePending) && (
-        <div className="w-screen h-screen fixed top-0 left-0 bg-black/50 z-10 flex items-center justify-center">
-          <div className="size-10 rounded-full border-2 border-slate-200 border-t-slate-400 animate-spin" />
-        </div>
+      {(isUpdatePending || isDeletePending || isPending) && (
+        <Loading isFullScreen />
       )}
       <CheckListDetail
         isCompleted={isCompleted}
@@ -185,9 +184,9 @@ const DetailSection = () => {
             imageUrl ? "border-solid" : "border-dashed border-spacing-[15px]"
           )}
         >
-          {(isPending || isUploadPending) && (
+          {isUploadPending && (
             <div className="w-full h-[311px] bg-slate-50/30 absolute z-10 flex items-center justify-center">
-              <div className="size-10 rounded-full border-2 border-slate-200 border-t-slate-400 animate-spin" />
+              <Loading />
             </div>
           )}
           {imageUrl ? (
@@ -229,11 +228,6 @@ const DetailSection = () => {
             />
           </div>
           <div className="lg:w-[588px] w-full h-[311px] overflow-hidden rounded-2xl flex items-center justify-center absolute top-0 left-0 pt-[58px]">
-            {isPending && (
-              <div className="w-full h-full flex items-center justify-center absolute top-0 left-0">
-                <div className="size-10 rounded-full border-2 border-slate-200 border-t-slate-300 animate-spin" />
-              </div>
-            )}
             <Typography variant="body2" className="h-full z-10 px-4 w-full">
               <textarea
                 value={memo}

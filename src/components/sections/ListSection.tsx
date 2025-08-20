@@ -7,6 +7,9 @@ import emptyTodoLg from "../../assets/images/todolg.svg";
 import { useQuery } from "@tanstack/react-query";
 import { useTodoListQuery } from "../../apis/todo/queries/todo.query-options";
 import List from "../UI/List/List";
+import Loading from "../UI/Loading/Loading";
+import { useIsFetching } from "@tanstack/react-query";
+import QueryKeys from "@/apis/query-keys";
 
 const ListSection = () => {
   // 데이터 불러오기
@@ -19,8 +22,13 @@ const ListSection = () => {
     throw new Error("데이터를 불러오는데 실패했습니다.");
   }
 
+  const isListPending = useIsFetching({
+    queryKey: QueryKeys.todo.all,
+  });
+
   return (
     <section className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-6 pb-6">
+      {isListPending > 0 && <Loading isFullScreen />}
       <List
         type={todo}
         items={data?.filter((item) => !item.isCompleted)}
